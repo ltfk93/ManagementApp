@@ -50,7 +50,7 @@
                     </StackPanel>
                     <StackPanel x:Name="notesPanel">
                         <TextBlock Text="Notes:" Margin="0,0,0,5"/>
-                        <TextBox x:Name="notesBox" Height="120" Width="280" Margin="0,0,10,5" Background="LightGray"/>
+                        <TextBox x:Name="notesBox" IsReadOnly="True" Height="120" Width="280" Margin="0,0,10,5" Background="LightGray"/>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal">
                         <Button x:Name="editBtn" Content="Edit" Click="editBtn_Click" Width="240"/>

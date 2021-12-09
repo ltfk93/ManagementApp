@@ -1,0 +1,56 @@
+﻿<Window x:Class="ManagementApp.DatabaseContent"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ManagementApp"
+        mc:Ignorable="d"
+        WindowStartupLocation="CenterScreen"  WindowState="Normal"
+        Title="DatabaseContent" Height="450" Width="800">
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="30"/>
+        </Grid.RowDefinitions>
+        <ListView Name="peopleDatabase" Grid.Row="0" SelectionChanged="peopleDatabase_SelectionChanged">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Width="120" DisplayMemberBinding="{Binding FirstName}">
+                        <GridViewColumn.Header>
+                            <GridViewColumnHeader Tag="FirstName" Click="listViewColumn_Click">First Name</GridViewColumnHeader>
+                        </GridViewColumn.Header>
+                    </GridViewColumn>
+                    <GridViewColumn Width="120" DisplayMemberBinding="{Binding LastName}">
+                        <GridViewColumn.Header>
+                            <GridViewColumnHeader Tag="LastName" Click="listViewColumn_Click">Last Name</GridViewColumnHeader>
+                        </GridViewColumn.Header>
+                    </GridViewColumn>
+                    <GridViewColumn Width="120" DisplayMemberBinding="{Binding Age}">
+                        <GridViewColumn.Header>
+                            <GridViewColumnHeader Tag="Age" Click="listViewColumn_Click">Age</GridViewColumnHeader>
+                        </GridViewColumn.Header>
+                    </GridViewColumn>
+                    <GridViewColumn Width="120" DisplayMemberBinding="{Binding TotalIncome}">
+                        <GridViewColumn.Header>
+                            <GridViewColumnHeader Tag="TotalIncome" Click="listViewColumn_Click">Total Income</GridViewColumnHeader>
+                        </GridViewColumn.Header>
+                    </GridViewColumn>
+                    <GridViewColumn Width="120" DisplayMemberBinding="{Binding RetirementFund}">
+                        <GridViewColumn.Header>
+                            <GridViewColumnHeader Tag="RetirementFund" Click="listViewColumn_Click">Retirement Fund</GridViewColumnHeader>
+                        </GridViewColumn.Header>
+                    </GridViewColumn>
+                    <GridViewColumn Width="150" DisplayMemberBinding="{Binding Handler}">
+                        <GridViewColumn.Header>
+                            <GridViewColumnHeader Tag="Handler" Click="listViewColumn_Click">Handler</GridViewColumnHeader>
+                        </GridViewColumn.Header>
+                    </GridViewColumn>
+                </GridView>
+            </ListView.View>
+        </ListView>
+        <StackPanel Orientation="Horizontal" Name="buttonPanel" Grid.Row="1" HorizontalAlignment="Right">
+            <Button x:Name="manageBtn" Content="Manage User" Width="100" Click="manageBtn_Click" Visibility="Hidden"></Button>
+            <Button x:Name="exitBtn" Content="Exit" Width="100" Click="exitBtn_Click"></Button>
+        </StackPanel>
+    </Grid>
+</Window>

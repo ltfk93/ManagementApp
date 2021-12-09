@@ -8,21 +8,30 @@ namespace ManagementApp
 {
     /// <summary>
     /// Interaction logic for DatabaseContent.xaml
+    /// Class/Window to load in all of the people in the database.
     /// </summary>
     public partial class DatabaseContent : Window
     {
+        //Creating a key/value pair that will store which columnheader that the list should sort by as "key", and the direction as "value"
         KeyValuePair<string, string> sortOrder = new KeyValuePair<string, string>("PersonID", "asc");
-        private int userID;
-        private string userName;
+
+        //Setting connectionstring to MSSQL server. Also setting a default path for the picture that will show for users that has no pictures saved
         const string defaultPic = @"C:\Users\Ali\Pictures\none.png";
         const string connectionString = @"Data Source=DESKTOP-0M7SFEP\SQLEXPRESS;
                                         Initial Catalog=PersonDatabase;
                                         User ID=desktop-0m7sfep\ali;
                                         Password=;
                                         Trusted_Connection=Yes";
+
+        //Declaring the SQL variables
         SqlConnection connection;
         SqlCommand command;
         SqlDataReader reader;
+
+        //Storing the EmployeeID and Workername in these variables.
+        private int userID;
+        private string userName;
+
         public DatabaseContent(int userID, string userName)
         {
             this.userID = userID;
@@ -30,6 +39,8 @@ namespace ManagementApp
             InitializeComponent();
             seedList(sortOrder);
         }
+
+        //This function runs when a column header has been clicked on. Sorts the list depending on what the tag of the columnheader is, and what the key/value pair for that tag is.
         private void listViewColumn_Click(object sender, RoutedEventArgs e)
         {
             GridViewColumnHeader column = (sender as GridViewColumnHeader);
@@ -124,6 +135,8 @@ namespace ManagementApp
                     break;
             }
         }
+
+        //Function to populate the listview. Takes a Key/Value pair for options on what to order the list by, and in which direction.
         public void seedList(KeyValuePair<string, string> sortOptions)
         {
             string query = 
@@ -157,11 +170,13 @@ namespace ManagementApp
             closeConnections();
         }
 
+        //This function runs when the "Manage" button has been clicked. This is only clickable if the person chosen from the list is not already being handled/managed by the user logged in.
         private void manageBtn_Click(object sender, RoutedEventArgs e)
         {
             Person selectedPerson = (Person) peopleDatabase.SelectedItems[0];
             if(selectedPerson.Handler != null && !selectedPerson.Handler.Equals(userName))
             {
+                //Creating a DialogResult variable to hold the respons from the message box. Promting the user to either click on yes or no whether the user is sure that he will take over the handler role for the user
                 System.Windows.Forms.DialogResult dr = System.Windows.Forms.MessageBox.Show($"{selectedPerson.FirstName} {selectedPerson.LastName} already has a handler\nAre you sure you want to take over the handler role?", "Warning",
                     System.Windows.Forms.MessageBoxButtons.YesNo, System.Windows.Forms.MessageBoxIcon.Question);
                 if(dr == System.Windows.Forms.DialogResult.Yes)
@@ -180,11 +195,14 @@ namespace ManagementApp
             }
 
         }
+
+        //This function runs when the Exit button is clicked. Closes this instance Window.
         private void exitBtn_Click(object sender, RoutedEventArgs e)
         {
             this.Close();
         }
 
+        //This function runs when a person from the listview has been clicked on. If the person chosen is already being handled by the user logged in, then the "Manage" button will be hidden. 
         private void peopleDatabase_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if(peopleDatabase.SelectedItems.Count != 0)
@@ -204,6 +222,8 @@ namespace ManagementApp
                 manageBtn.Visibility = Visibility.Hidden;
             }
         }
+
+        //Closes the database connections and deals with garbagecollection.
         private void closeConnections()
         {
             reader.Close();

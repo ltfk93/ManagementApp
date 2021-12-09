@@ -7,15 +7,16 @@
         mc:Ignorable="d"
         ResizeMode="NoResize"
         WindowStartupLocation="CenterScreen" WindowState="Normal"
-        Title="Management Interface" Height="800" Width="900">
-    <StackPanel>
+        Title="Management Interface" Height="850" Width="900">
+    <DockPanel>
 
         <Grid Background="Beige">
             <Grid.RowDefinitions>
                 <RowDefinition Height="80"/>
                 <RowDefinition Height="auto"/>
                 <RowDefinition Height="*"/>
-                <RowDefinition Height="10"/>
+                <RowDefinition Height="5"/>
+                <!--<RowDefinition Height="10"/>-->
             </Grid.RowDefinitions>
             <DockPanel  Grid.Row="0" Name="topDock">
                 <!--<Label Content="" x:Name="userIDLabel" HorizontalAlignment="Left"/>-->
@@ -49,7 +50,7 @@
                     </StackPanel>
                     <StackPanel x:Name="notesPanel">
                         <TextBlock Text="Notes:" Margin="0,0,0,5"/>
-                        <TextBox x:Name="notesBox" Height="120" Margin="0,0,10,5" Background="LightGray"/>
+                        <TextBox x:Name="notesBox" Height="120" Width="280" Margin="0,0,10,5" Background="LightGray"/>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal">
                         <Button x:Name="editBtn" Content="Edit" Click="editBtn_Click" Width="240"/>
@@ -65,15 +66,34 @@
             <ListView x:Name="peopleList" Grid.Row="2" SelectionMode="Extended" SelectionChanged="peopleList_SelectionChanged" d:ItemsSource="{d:SampleData ItemCount=5}">
                 <ListView.View>
                     <GridView>
-                        <GridViewColumn Header="First Name"  Width="160" DisplayMemberBinding="{Binding FirstName}">
+                        <GridViewColumn Width="174" DisplayMemberBinding="{Binding FirstName}">
+                            <GridViewColumn.Header>
+                                <GridViewColumnHeader Tag="FirstName" Click="listViewColumn_Click">First Name</GridViewColumnHeader>
+                            </GridViewColumn.Header>
                         </GridViewColumn>
-                        <GridViewColumn Header="Last Name" Width="160" DisplayMemberBinding="{Binding LastName}"/>
-                            <GridViewColumn Header="Age" Width ="160" DisplayMemberBinding="{Binding Age}"/>
-                            <GridViewColumn Header="Total Income" Width="160" DisplayMemberBinding="{Binding TotalIncome}"/>
-                            <GridViewColumn Header="Retirement fund saved up" Width="160" DisplayMemberBinding="{Binding RetirementFund}"/>
+                        <GridViewColumn Width="174" DisplayMemberBinding="{Binding LastName}">
+                            <GridViewColumn.Header>
+                                <GridViewColumnHeader Tag="LastName" Click="listViewColumn_Click">Last Name</GridViewColumnHeader>
+                            </GridViewColumn.Header>
+                        </GridViewColumn>
+                        <GridViewColumn Width="174" DisplayMemberBinding="{Binding Age}">
+                            <GridViewColumn.Header>
+                                <GridViewColumnHeader Tag="Age" Click="listViewColumn_Click">Age</GridViewColumnHeader>
+                            </GridViewColumn.Header>
+                        </GridViewColumn>
+                        <GridViewColumn Width="174" DisplayMemberBinding="{Binding TotalIncome}">
+                            <GridViewColumn.Header>
+                                <GridViewColumnHeader Tag="TotalIncome" Click="listViewColumn_Click">Total Income</GridViewColumnHeader>
+                            </GridViewColumn.Header>
+                        </GridViewColumn>
+                        <GridViewColumn Width="174" DisplayMemberBinding="{Binding RetirementFund}">
+                            <GridViewColumn.Header>
+                                <GridViewColumnHeader Tag="RetirementFund" Click="listViewColumn_Click">Retirement Fund</GridViewColumnHeader>
+                            </GridViewColumn.Header>
+                        </GridViewColumn>
                     </GridView>
                     </ListView.View>
                 </ListView>
             </Grid>
-    </StackPanel>
+    </DockPanel>
 </Window>

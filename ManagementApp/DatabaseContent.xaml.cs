@@ -1,4 +1,5 @@
-﻿using System.Data;
+﻿using System.Collections.Generic;
+using System.Data;
 using System.Data.SqlClient;
 using System.Windows;
 using System.Windows.Controls;
@@ -10,7 +11,7 @@ namespace ManagementApp
     /// </summary>
     public partial class DatabaseContent : Window
     {
-        ListView lw;
+        KeyValuePair<string, string> sortOrder = new KeyValuePair<string, string>("PersonID", "asc");
         private int userID;
         private string userName;
         const string defaultPic = @"C:\Users\Ali\Pictures\none.png";
@@ -22,13 +23,12 @@ namespace ManagementApp
         SqlConnection connection;
         SqlCommand command;
         SqlDataReader reader;
-        public DatabaseContent(ListView lw, int userID, string userName)
+        public DatabaseContent(int userID, string userName)
         {
-            this.lw = lw;
             this.userID = userID;
             this.userName = userName;
             InitializeComponent();
-            seedList();
+            seedList(sortOrder);
         }
         private void listViewColumn_Click(object sender, RoutedEventArgs e)
         {
@@ -37,38 +37,86 @@ namespace ManagementApp
             {
                 case "firstname":
                     {
+                        if (sortOrder.Key.Equals("p.Firstname"))
+                        {
+                            sortOrder = new KeyValuePair<string, string>("p.Firstname", sortOrder.Value == "asc" ? "desc" : "asc;");
+                        }
+                        else
+                        {
+                            sortOrder = new KeyValuePair<string, string>("p.Firstname", "asc");
+                        }
                         peopleDatabase.Items.Clear();
-                        seedList("p.Firstname");
+                        seedList(sortOrder);
                         break;
                     }
                 case "lastname":
                     {
+                        if (sortOrder.Key.Equals("p.Lastname"))
+                        {
+                            sortOrder = new KeyValuePair<string, string>("p.Lastname", sortOrder.Value == "asc" ? "desc" : "asc;");
+                        }
+                        else
+                        {
+                            sortOrder = new KeyValuePair<string, string>("p.Lastname", "asc");
+                        }
                         peopleDatabase.Items.Clear();
-                        seedList("p.Lastname");
+                        seedList(sortOrder);
                         break;
                     }
                 case "age":
                     {
+                        if (sortOrder.Key.Equals("p.Age"))
+                        {
+                            sortOrder = new KeyValuePair<string, string>("p.Age", sortOrder.Value == "asc" ? "desc" : "asc;");
+                        }
+                        else
+                        {
+                            sortOrder = new KeyValuePair<string, string>("p.Age", "asc");
+                        }
                         peopleDatabase.Items.Clear();
-                        seedList("p.Age");
+                        seedList(sortOrder);
                         break;
                     }
                 case "totalincome":
                     {
+                        if (sortOrder.Key.Equals("p.TotalIncome"))
+                        {
+                            sortOrder = new KeyValuePair<string, string>("p.TotalIncome", sortOrder.Value == "asc" ? "desc" : "asc;");
+                        }
+                        else
+                        {
+                            sortOrder = new KeyValuePair<string, string>("p.TotalIncome", "asc");
+                        }
                         peopleDatabase.Items.Clear();
-                        seedList("p.TotalIncome");
+                        seedList(sortOrder);
                         break;
                     }
                 case "retirementfund":
                     {
+                        if (sortOrder.Key.Equals("p.RetirementFunt"))
+                        {
+                            sortOrder = new KeyValuePair<string, string>("p.RetirementFunt", sortOrder.Value == "asc" ? "desc" : "asc;");
+                        }
+                        else
+                        {
+                            sortOrder = new KeyValuePair<string, string>("p.RetirementFunt", "asc");
+                        }
                         peopleDatabase.Items.Clear();
-                        seedList("p.RetirementFunt");
+                        seedList(sortOrder);
                         break;
                     }
                 case "handler":
                     {
+                        if (sortOrder.Key.Equals("l.Workername"))
+                        {
+                            sortOrder = new KeyValuePair<string, string>("l.Workername", sortOrder.Value == "asc" ? "desc" : "asc;");
+                        }
+                        else
+                        {
+                            sortOrder = new KeyValuePair<string, string>("l.Workername", "asc");
+                        }
                         peopleDatabase.Items.Clear();
-                        seedList("l.Workername");
+                        seedList(sortOrder);
                         break;
                     }
                 default:
@@ -76,14 +124,10 @@ namespace ManagementApp
                     break;
             }
         }
-        public void seedList(string commandText = "")
+        public void seedList(KeyValuePair<string, string> sortOptions)
         {
-            string query = $"SELECT p.PersonID, p.FirstName, p.LastName, p.Age, p.PictureUrl, p.TotalIncome, p.RetirementFunt, l.Workername From Person as p LEFT JOIN Logintable as l ON p.EmployeeID = l.EmployeeID";
-            
-            if (commandText.Length > 0)
-            {
-                query += $" ORDER BY {commandText}";
-            }
+            string query = 
+                $"SELECT p.PersonID, p.FirstName, p.LastName, p.Age, p.PictureUrl, p.TotalIncome, p.RetirementFunt, l.Workername From Person as p LEFT JOIN Logintable as l ON p.EmployeeID = l.EmployeeID ORDER BY {sortOptions.Key} {sortOptions.Value}";
 
             connection = new SqlConnection(connectionString);
             connection.Open();
@@ -131,7 +175,7 @@ namespace ManagementApp
                     command.ExecuteNonQuery();
                     closeConnections();
                     peopleDatabase.Items.Clear();
-                    seedList();
+                    seedList(sortOrder);
                 }
             }
 

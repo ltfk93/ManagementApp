@@ -6,6 +6,7 @@ using System.Data;
 using System.Windows.Media.Imaging;
 using System;
 using System.Windows.Media;
+using System.Collections.Generic;
 
 namespace ManagementApp
 {
@@ -14,6 +15,7 @@ namespace ManagementApp
     /// </summary>
     public partial class MainWindow : Window
     {
+        KeyValuePair<string, string> sortOrder = new KeyValuePair<string, string>("PersonID", "asc");
         const string defaultPic = @"C:\Users\Ali\Pictures\none.png";
         const string connectionString = @"Data Source=DESKTOP-0M7SFEP\SQLEXPRESS;
                                         Initial Catalog=PersonDatabase;
@@ -72,7 +74,7 @@ namespace ManagementApp
             topDock.Children.Add(spLeft);
             topDock.Children.Add(spRight);
 
-            seedList();
+            seedList(sortOrder);
         }
 
         private void editBtn_Click(object sender, RoutedEventArgs e)
@@ -113,18 +115,24 @@ namespace ManagementApp
                     }
                     else
                     {
-                        changePerson(firstNameField.Text, lastNameField.Text, int.Parse(ageField.Text), int.Parse(earnedField.Text), notesBox.Text, personID);
+                        changePerson(firstNameField.Text, lastNameField.Text, int.Parse(ageField.Text), int.Parse(earnedField.Text), 
+                           tempNotes.ToString().Equals(notesBox.Text) ? "" : notesBox.Text, personID);
                         MessageBox.Show("Changes has been made successfully. Reloading list.");
                         peopleList.Items.Clear();
 
                         firstNameField.Text = string.Empty;
                         lastNameField.Text = string.Empty;
                         ageField.Text = string.Empty;
-
+                        earnedField.Text = string.Empty;
+                        fundField.Text = string.Empty;
+                        notesBox.Text = string.Empty;
+                        imageProfile.Source = new BitmapImage(new Uri(defaultPic));
+                        imageProfile.Width = 300;
+                        imageProfile.Height = 300;
 
                         clearTemps();
                         makeUnEditable();
-                        seedList();
+                        seedList(sortOrder);
                     }
                 }
             }
@@ -137,7 +145,7 @@ namespace ManagementApp
             this.Close();
         }
 
-        public void seedList()
+        public void seedList(KeyValuePair<string,string> sortOptions)
         {
             connection = new SqlConnection(connectionString);
             connection.Open();
@@ -146,6 +154,8 @@ namespace ManagementApp
             command.Connection = connection;
             command.CommandType = CommandType.Text;
             command.CommandText = $"SELECT * From Person WHERE EmployeeID={userID}";
+            command.CommandText += $" ORDER BY {sortOptions.Key} {sortOptions.Value}"; 
+
 
             reader = command.ExecuteReader();
 
@@ -198,7 +208,7 @@ namespace ManagementApp
         {
             int retirement = (totalEarned * 5) / 100;
 
-            tempNotes.Append($"New note:\n{note}");
+            tempNotes.Append(note.Length < 1 ? "" : $"New note:\n{note}");
             connection = new SqlConnection(connectionString);
             connection.Open();
 
@@ -237,9 +247,89 @@ namespace ManagementApp
                 return;
 
         }
+        private void listViewColumn_Click(object sender, RoutedEventArgs e)
+        {
+            GridViewColumnHeader column = (sender as GridViewColumnHeader);
+            switch (column.Tag.ToString().ToLower())
+            {
+                case "firstname":
+                    {
+                        if(sortOrder.Key.Equals("Firstname"))
+                        {
+                            sortOrder = new KeyValuePair<string, string>("Firstname", sortOrder.Value == "asc" ? "desc" : "asc;");
+                        }
+                        else
+                        {
+                            sortOrder = new KeyValuePair<string, string>("Firstname","asc");
+                        }
+                        peopleList.Items.Clear();
+                        seedList(sortOrder);
+                        break;
+                    }
+                case "lastname":
+                    {
+                        if (sortOrder.Key.Equals("Lastname"))
+                        {
+                            sortOrder = new KeyValuePair<string, string>("Lastname", sortOrder.Value == "asc" ? "desc" : "asc;");
+                        }
+                        else
+                        {
+                            sortOrder = new KeyValuePair<string, string>("Lastname", "asc");
+                        }
+                        peopleList.Items.Clear();
+                        seedList(sortOrder);
+                        break;
+                    }
+                case "age":
+                    {
+                        if (sortOrder.Key.Equals("Age"))
+                        {
+                            sortOrder = new KeyValuePair<string, string>("Age", sortOrder.Value == "asc" ? "desc" : "asc;");
+                        }
+                        else
+                        {
+                            sortOrder = new KeyValuePair<string, string>("Age", "asc");
+                        }
+                        peopleList.Items.Clear();
+                        seedList(sortOrder);
+                        break;
+                    }
+                case "totalincome":
+                    {
+                        if (sortOrder.Key.Equals("TotalIncome"))
+                        {
+                            sortOrder = new KeyValuePair<string, string>("TotalIncome", sortOrder.Value == "asc" ? "desc" : "asc;");
+                        }
+                        else
+                        {
+                            sortOrder = new KeyValuePair<string, string>("TotalIncome", "asc");
+                        }
+                        peopleList.Items.Clear();
+                        seedList(sortOrder);
+                        break;
+                    }
+                case "retirementfund":
+                    {
+                        if (sortOrder.Key.Equals("RetirementFunt"))
+                        {
+                            sortOrder = new KeyValuePair<string, string>("RetirementFunt", sortOrder.Value == "asc" ? "desc" : "asc;");
+                        }
+                        else
+                        {
+                            sortOrder = new KeyValuePair<string, string>("RetirementFunt", "asc");
+                        }
+                        peopleList.Items.Clear();
+                        seedList(sortOrder);
+                        break;
+                    }
+                default:
+                    MessageBox.Show($"Clicked on {column.Tag.ToString()}");
+                    break;
+            }
+        }
         private void loadDatabaseListWindow(object sender, RoutedEventArgs e)
         {
-            new DatabaseContent(peopleList, userID, userName).Show();
+            new DatabaseContent(userID, userName).Show();
         }
         public void makeUnEditable()
         {

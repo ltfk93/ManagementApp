@@ -12,75 +12,96 @@ namespace ManagementApp
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
+    /// This class is the meat of the application.Works as a userinterface for the worker.
     /// </summary>
     public partial class MainWindow : Window
     {
+        //Creating a key/value pair that will store which columnheader that the list should sort by as "key", and the direction as "value"
         KeyValuePair<string, string> sortOrder = new KeyValuePair<string, string>("PersonID", "asc");
+       
+        //Setting connectionstring to MSSQL server. Also setting a default path for the picture that will show for users that has no pictures saved
         const string defaultPic = @"C:\Users\Ali\Pictures\none.png";
         const string connectionString = @"Data Source=DESKTOP-0M7SFEP\SQLEXPRESS;
                                         Initial Catalog=PersonDatabase;
                                         User ID=desktop-0m7sfep\ali;
                                         Password=;
                                         Trusted_Connection=Yes";
+
+        //Declaring the SQL variables
         SqlConnection connection;
         SqlCommand command;
         SqlDataReader reader;
 
+        //Creating Stringbuilders that will hold the temporary text values of Firstname, Lastname and Notes
         StringBuilder tempFirstName = new StringBuilder();
         StringBuilder tempLastName = new StringBuilder();
         StringBuilder tempNotes = new StringBuilder();
+
+        //Creating int variables that will hold the temporary values for Age and TotalIncome.
         int tempAge = 0;
         int tempTotalEarned = 0;
 
+        //Storing the PersonID of the selected person from the listview in the int variable personID. This is used to make changes to the user in a SQL Query 
         int personID = -1;
+
+        //Storing the EmployeeID and Workername in these variables.
         int userID;
         string userName;
+
         public MainWindow(string username, int userID)
         {
             this.userID = userID;
             this.userName = username;
             InitializeComponent();
 
-
+            //Creating the logout button
             Button logOutbutton = new Button();
             logOutbutton.Content = "Log Out";
             logOutbutton.Click += logOutBtn_Click;
             logOutbutton.Width = 120;
 
+            //Creating the button to load all people from the database
             Button loadMoreButton = new Button();
             loadMoreButton.Content = "Load database";
             loadMoreButton.Width = 120;
             loadMoreButton.Click += loadDatabaseListWindow;
 
+            //Creating the button to refresh the listview
             Button refreshList = new Button();
             refreshList.Content = "Refresh List";
             refreshList.Width = 120;
             refreshList.Click += seedList;
 
+            //Creating label to display the user that is logged in.
+            Label userIDLabel = new Label();
+            userIDLabel.Content = $"Logged in as {username}";
+
+            //Creating a stackpanel that will be aligned to the right. It will hold 2 buttons.
             StackPanel spRight = new StackPanel();
             spRight.Children.Add(loadMoreButton);
             spRight.Children.Add(refreshList);
             spRight.HorizontalAlignment = HorizontalAlignment.Right;
 
-            Label userIDLabel = new Label();
-            userIDLabel.Content = $"Logged in as {username}";
-
-
+            //Creating a stackpanel that will be aligned to the left. It will hold a label and logout button.
             StackPanel spLeft = new StackPanel();
             spLeft.Children.Add(userIDLabel);
             spLeft.Children.Add(logOutbutton);
             spLeft.HorizontalAlignment = HorizontalAlignment.Left;
 
+            //Adding both stackpanels to a Dockpanel in Mainwindow.xaml .
             topDock.Children.Add(spLeft);
             topDock.Children.Add(spRight);
 
             seedList(sortOrder);
         }
 
+        //Function that runs if the user clicks on the edit button.
         private void editBtn_Click(object sender, RoutedEventArgs e)
         {
+            //Checks if an entry in the listview has been selected. If not, nothing will happen when clicking on edit.
             if(peopleList.SelectedItems.Count != 0)
             {
+                //Checking if the content value of editBtn. If it is edit, it changes the button text to "save" and makes the cancel button visible.
                 if (editBtn.Content.Equals("Edit"))
                 {
 
@@ -95,6 +116,7 @@ namespace ManagementApp
                 }
                 else
                 {
+                    //Checks if there was no changes made
                     if ((firstNameField.Text.ToLower().Equals(tempFirstName.ToString().ToLower()) && lastNameField.Text.ToLower().Equals(tempLastName.ToString().ToLower()) && tempAge == int.Parse(ageField.Text)
                         && tempTotalEarned == int.Parse(earnedField.Text.ToString())) && tempNotes.ToString().Equals(notesBox.Text))
                     {
@@ -102,6 +124,8 @@ namespace ManagementApp
                         clearTemps();
                         makeUnEditable();
                     }
+
+                    //Checks if user is trying to save one of the fields with no information.
                     else if(firstNameField.Text.Length < 1 || lastNameField.Text.Length < 1 || ageField.Text.Length < 1 || earnedField.Text.Length < 1)
                     {
                         MessageBox.Show("You have to fill out all the fields to make a change. Reverting changes and canceling edit.","Information");
@@ -113,6 +137,7 @@ namespace ManagementApp
                         clearTemps();
                         makeUnEditable();
                     }
+                    //Changes were detected. Calling the changePerson function with the changes that will be queried in to the database.
                     else
                     {
                         changePerson(firstNameField.Text, lastNameField.Text, int.Parse(ageField.Text), int.Parse(earnedField.Text), 
@@ -138,6 +163,7 @@ namespace ManagementApp
             }
         }
 
+        //This functions runs when the log out button is clicked. Closes the MainWindow and opens the login window again.
         private void logOutBtn_Click(object sender, RoutedEventArgs e)
         {
             Login loginWindow = new Login();
@@ -145,6 +171,7 @@ namespace ManagementApp
             this.Close();
         }
 
+        //Function to populate the listview. Takes a Key/Value pair for options on what to order the list by, and in which direction.
         public void seedList(KeyValuePair<string,string> sortOptions)
         {
             connection = new SqlConnection(connectionString);
@@ -175,6 +202,8 @@ namespace ManagementApp
             }
 
         }
+
+        //Seedlist overload function created so that the button to refresh the list can call it.
         public void seedList(object sender, RoutedEventArgs e)
         {
             peopleList.Items.Clear();
@@ -204,10 +233,13 @@ namespace ManagementApp
             }
 
         }
+
+        //Function to change the person in the database.
         public void changePerson(string FirstName, string LastName, int age, int totalEarned, string note, int ID)
         {
             int retirement = (totalEarned * 5) / 100;
 
+            //Checks if something was passed in to the note. It will be an empty string if there was no changes made to the notes. If there is a string passed, it gets appended to the existing notes the person has,
             tempNotes.Append(note.Length < 1 ? "" : $"New note:\n{note}");
             connection = new SqlConnection(connectionString);
             connection.Open();
@@ -224,6 +256,8 @@ namespace ManagementApp
             connection.Close();
             connection.Dispose();
         }
+
+        //This function runs when a person from the listview has been clicked on. Populates the fields and sets the image if there is an image path saved.
         private void peopleList_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (peopleList.SelectedItems.Count != 0)
@@ -247,6 +281,8 @@ namespace ManagementApp
                 return;
 
         }
+
+        //This function runs when a column header has been clicked on. Sorts the list depending on what the tag of the columnheader is, and what the key/value pair for that tag is.
         private void listViewColumn_Click(object sender, RoutedEventArgs e)
         {
             GridViewColumnHeader column = (sender as GridViewColumnHeader);
@@ -327,10 +363,14 @@ namespace ManagementApp
                     break;
             }
         }
+
+        //This function runs when user clicks on Load database button. Opens a new instance of DatabaseContent, and passes in the EmployeeID and Workername.
         private void loadDatabaseListWindow(object sender, RoutedEventArgs e)
         {
             new DatabaseContent(userID, userName).Show();
         }
+
+        //Makes all the fields readonly and changes the background color for the textbox`es
         public void makeUnEditable()
         {
             firstNameField.IsReadOnly = true;
@@ -354,6 +394,7 @@ namespace ManagementApp
             editBtn.Content = "Edit";
         }
 
+        //Makes all the fields editable and changes the background color for the textbox`es
         public void makeEditable()
         {
             firstNameField.IsReadOnly = false;
@@ -377,6 +418,7 @@ namespace ManagementApp
             editBtn.Content = "Save";
         }
 
+        //This function runs if the cancel button has been clicked. Disables editing on the selected person from the list and runs makeUnEditable().
         public void cancelBtn_Click(object sender, RoutedEventArgs e)
         {
             tempFirstName.Clear();
@@ -387,6 +429,8 @@ namespace ManagementApp
 
             makeUnEditable();
         }
+
+        //Clears the temporary values
         public void clearTemps()
         {
             tempFirstName.Clear();

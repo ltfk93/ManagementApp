@@ -101,6 +101,9 @@ namespace ManagementApp
             //Checks if an entry in the listview has been selected. If not, nothing will happen when clicking on edit.
             if(peopleList.SelectedItems.Count != 0)
             {
+                int validAge;
+                int validFund;
+               
                 //Checking if the content value of editBtn. If it is edit, it changes the button text to "save" and makes the cancel button visible.
                 if (editBtn.Content.Equals("Edit"))
                 {
@@ -116,9 +119,19 @@ namespace ManagementApp
                 }
                 else
                 {
+                    if (!int.TryParse(ageField.Text, out validAge))
+                    {
+                        MessageBox.Show("Invalid value in age field. Please type in only numbers.");
+                        return;
+                    }
+                    else if (!int.TryParse(earnedField.Text, out validFund))
+                    {
+                        MessageBox.Show("Invalid value in Total income field. Please type in only numbers.");
+                        return;
+                    }
                     //Checks if there was no changes made
-                    if ((firstNameField.Text.ToLower().Equals(tempFirstName.ToString().ToLower()) && lastNameField.Text.ToLower().Equals(tempLastName.ToString().ToLower()) && tempAge == int.Parse(ageField.Text)
-                        && tempTotalEarned == int.Parse(earnedField.Text.ToString())) && tempNotes.ToString().Equals(notesBox.Text))
+                    if ((firstNameField.Text.ToLower().Equals(tempFirstName.ToString().ToLower()) && lastNameField.Text.ToLower().Equals(tempLastName.ToString().ToLower()) && tempAge == 
+                        int.Parse(ageField.Text.Length < 1 ? "0" : ageField.Text) && tempTotalEarned == int.Parse(earnedField.Text.ToString().Length < 1 ? "0" : earnedField.Text.ToString())) && tempNotes.ToString().Equals(notesBox.Text))
                     {
                         MessageBox.Show("No changes were made.", "Information");
                         clearTemps();
@@ -133,6 +146,7 @@ namespace ManagementApp
                         firstNameField.Text = tempFirstName.ToString();
                         lastNameField.Text = tempLastName.ToString();
                         ageField.Text = tempAge.ToString();
+                        earnedField.Text = tempTotalEarned.ToString();
 
                         clearTemps();
                         makeUnEditable();
@@ -292,7 +306,7 @@ namespace ManagementApp
                     {
                         if(sortOrder.Key.Equals("Firstname"))
                         {
-                            sortOrder = new KeyValuePair<string, string>("Firstname", sortOrder.Value == "asc" ? "desc" : "asc;");
+                            sortOrder = new KeyValuePair<string, string>("Firstname", sortOrder.Value == "asc" ? "desc" : "asc");
                         }
                         else
                         {
@@ -306,7 +320,7 @@ namespace ManagementApp
                     {
                         if (sortOrder.Key.Equals("Lastname"))
                         {
-                            sortOrder = new KeyValuePair<string, string>("Lastname", sortOrder.Value == "asc" ? "desc" : "asc;");
+                            sortOrder = new KeyValuePair<string, string>("Lastname", sortOrder.Value == "asc" ? "desc" : "asc");
                         }
                         else
                         {
@@ -320,7 +334,7 @@ namespace ManagementApp
                     {
                         if (sortOrder.Key.Equals("Age"))
                         {
-                            sortOrder = new KeyValuePair<string, string>("Age", sortOrder.Value == "asc" ? "desc" : "asc;");
+                            sortOrder = new KeyValuePair<string, string>("Age", sortOrder.Value == "asc" ? "desc" : "asc");
                         }
                         else
                         {
@@ -334,7 +348,7 @@ namespace ManagementApp
                     {
                         if (sortOrder.Key.Equals("TotalIncome"))
                         {
-                            sortOrder = new KeyValuePair<string, string>("TotalIncome", sortOrder.Value == "asc" ? "desc" : "asc;");
+                            sortOrder = new KeyValuePair<string, string>("TotalIncome", sortOrder.Value == "asc" ? "desc" : "asc");
                         }
                         else
                         {
@@ -348,7 +362,7 @@ namespace ManagementApp
                     {
                         if (sortOrder.Key.Equals("RetirementFunt"))
                         {
-                            sortOrder = new KeyValuePair<string, string>("RetirementFunt", sortOrder.Value == "asc" ? "desc" : "asc;");
+                            sortOrder = new KeyValuePair<string, string>("RetirementFunt", sortOrder.Value == "asc" ? "desc" : "asc");
                         }
                         else
                         {
@@ -421,6 +435,12 @@ namespace ManagementApp
         //This function runs if the cancel button has been clicked. Disables editing on the selected person from the list and runs makeUnEditable().
         public void cancelBtn_Click(object sender, RoutedEventArgs e)
         {
+            firstNameField.Text = tempFirstName.ToString();
+            lastNameField.Text = tempLastName.ToString();
+            ageField.Text = tempAge.ToString();
+            earnedField.Text = tempTotalEarned.ToString();
+            notesBox.Text = tempNotes.ToString();
+
             tempFirstName.Clear();
             tempLastName.Clear();
             tempTotalEarned = 0;

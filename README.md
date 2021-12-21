@@ -8,3 +8,10 @@ The Person table contains all of the people that are registered in the system. T
 The EmployeeID in the <b>Person</b> table is used to assign it a handler from the <b>Logintable</b>. The assigned handler has the same employeeID.
 
 To set up the SQL server and tables, please follow the guide <a href="https://github.com/ltfk93/ManagementApp/blob/master/MSSQL%20Setup.md">MSSQL Setup.md</a>
+
+After that is done, you should be able to use the program and have seeded data in the database. You can log on to 2 users: 
+
+<b>Username: admin  | Password: admin
+Username: user  |   Password: password</b>
+
+Note that the username is not case-sensitive, but the password is.

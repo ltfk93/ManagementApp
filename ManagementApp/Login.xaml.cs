@@ -11,12 +11,15 @@ namespace ManagementApp
     /// </summary>
     public partial class Login : Window
     {
+
+        public const string ServerName = @"DESKTOP-0M7SFEP\SQLEXPRESS";
+        public const string TableName = "PersonDatabase";
+        public const string DBUsername = @"desktop-0m7sfep\ali";
+        public const string DBPassword = "";
+
+
         //Connectionstring for the MSSQL database
-        string connectionString = @"Data Source=DESKTOP-0M7SFEP\SQLEXPRESS;
-                                        Initial Catalog=PersonDatabase;
-                                        User ID=desktop-0m7sfep\ali;
-                                        Password=;
-                                        Trusted_Connection=Yes";
+        string connectionString = $"Data Source={ServerName};Initial Catalog={TableName};User ID={DBUsername};Password={DBPassword};Trusted_Connection=Yes";
 
         //Declaring variables that will connect to the database and query/read result.
         SqlConnection connection;

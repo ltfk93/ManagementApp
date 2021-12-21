@@ -16,16 +16,17 @@ namespace ManagementApp
     /// </summary>
     public partial class MainWindow : Window
     {
+        public const string ServerName = @"DESKTOP-0M7SFEP\SQLEXPRESS";
+        public const string TableName = "PersonDatabase";
+        public const string DBUsername = @"desktop-0m7sfep\ali";
+        public const string DBPassword = "";
+
         //Creating a key/value pair that will store which columnheader that the list should sort by as "key", and the direction as "value"
         KeyValuePair<string, string> sortOrder = new KeyValuePair<string, string>("PersonID", "asc");
        
         //Setting connectionstring to MSSQL server. Also setting a default path for the picture that will show for users that has no pictures saved
-        const string defaultPic = @"C:\Users\Ali\Pictures\none.png";
-        const string connectionString = @"Data Source=DESKTOP-0M7SFEP\SQLEXPRESS;
-                                        Initial Catalog=PersonDatabase;
-                                        User ID=desktop-0m7sfep\ali;
-                                        Password=;
-                                        Trusted_Connection=Yes";
+        const string defaultPic = @"Pictures\none.png";
+        string connectionString = $"Data Source={ServerName};Initial Catalog={TableName};User ID={DBUsername};Password={DBPassword};Trusted_Connection=Yes";
 
         //Declaring the SQL variables
         SqlConnection connection;
@@ -284,7 +285,7 @@ namespace ManagementApp
                 fundField.Text = itemFromList.RetirementFund.ToString();
                 notesBox.Text = itemFromList.Notes.ToString();
 
-                imageProfile.Source = new BitmapImage(new Uri(itemFromList.PictureUrl));
+                imageProfile.Source = new BitmapImage(new Uri(itemFromList.PictureUrl, UriKind.Relative));
                 imageProfile.Width = 300;
                 imageProfile.Height = 300;
                 imageProfile.HorizontalAlignment = HorizontalAlignment.Right;

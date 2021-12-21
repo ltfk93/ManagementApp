@@ -9,7 +9,7 @@
 
 4. Expand the Databases folder, right click on the database you created and click "New Query"
 
-5. Paste in the following queries to create both tables and insert values:
+5. Paste in the following queries to create both tables and insert values. Remember to execute the query:
 
 <b></i>CREATE TABLE Person(
 	PersonID int IDENTITY(1,1) PRIMARY KEY, Firstname VARCHAR(255), Lastname VARCHAR(255), Age int NOT NULL, EmployeeID int NOT NULL,
@@ -58,6 +58,9 @@ INSERT INTO LoginTable(Username, Password, Workername) VALUES(
 'admin','admin','Administrator'),
 ('user','password','Default User'
 );</i></b>
+
+<img width="1142" alt="image" src="https://user-images.githubusercontent.com/68993851/146937257-0a90ca26-43d1-4543-a37f-820ad3546fea.png">
+
 
 
 6. Make sure that you set the correct values in the DBClass for Servername, Databasename, Username and password so that the connectionstring to the server is made.

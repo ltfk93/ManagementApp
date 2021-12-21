@@ -9,7 +9,7 @@ The EmployeeID in the <b>Person</b> table is used to assign it a handler from th
 
 To set up the SQL server and tables, please follow the guide <a href="https://github.com/ltfk93/ManagementApp/blob/master/MSSQL%20Setup.md">MSSQL Setup.md</a>
 
-After that is done, you should be able to use the program and have seeded data in the database. The project can be downloaded by clicking Code -> Download as zip:
+After that is done, you should be able to use the program and have seeded data in the database. The project can be downloaded by clicking Code -> Download ZIP:
 ![image](https://user-images.githubusercontent.com/68993851/146937997-7422247e-afc3-4614-85b2-cb2998977a07.png)
 
 You can log on with 2 users: 

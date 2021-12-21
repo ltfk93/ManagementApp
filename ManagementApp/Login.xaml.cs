@@ -12,14 +12,8 @@ namespace ManagementApp
     public partial class Login : Window
     {
 
-        public const string ServerName = @"DESKTOP-0M7SFEP\SQLEXPRESS";
-        public const string TableName = "TestBase";
-        public const string DBUsername = @"desktop-0m7sfep\ali";
-        public const string DBPassword = "";
-
-
         //Connectionstring for the MSSQL database
-        string connectionString = $"Data Source={ServerName};Initial Catalog={TableName};User ID={DBUsername};Password={DBPassword};Trusted_Connection=Yes";
+        string connectionString = DBClass.getConnectionString();
 
         //Declaring variables that will connect to the database and query/read result.
         SqlConnection connection;

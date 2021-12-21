@@ -13,18 +13,12 @@ namespace ManagementApp
     public partial class DatabaseContent : Window
     {
 
-        public const string ServerName = @"DESKTOP-0M7SFEP\SQLEXPRESS";
-        public const string TableName = "TestBase";
-        public const string DBUsername = @"desktop-0m7sfep\ali";
-        public const string DBPassword = "";
-
-
         //Creating a key/value pair that will store which columnheader that the list should sort by as "key", and the direction as "value"
         KeyValuePair<string, string> sortOrder = new KeyValuePair<string, string>("PersonID", "asc");
 
         //Setting connectionstring to MSSQL server. Also setting a default path for the picture that will show for users that has no pictures saved
         const string defaultPic = @"Pictures\none.png";
-        string connectionString = $"Data Source={ServerName};Initial Catalog={TableName};User ID={DBUsername};Password={DBPassword};Trusted_Connection=Yes";
+        string connectionString = DBClass.getConnectionString();
 
         //Declaring the SQL variables
         SqlConnection connection;

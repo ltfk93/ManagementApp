@@ -9,7 +9,7 @@
 
 4. Expand the Databases folder, right click on the database you created and click "New Query"
 
-5. Paste in the following queries to create both tables and insert values. Remember to execute the query:
+5. Paste in the following queries to create both tables and insert values. Remember to execute the query(Marked with yellow in screenshot):
 
 <b></i>CREATE TABLE Person(
 	PersonID int IDENTITY(1,1) PRIMARY KEY, Firstname VARCHAR(255), Lastname VARCHAR(255), Age int NOT NULL, EmployeeID int NOT NULL,

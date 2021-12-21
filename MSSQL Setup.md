@@ -1,6 +1,6 @@
 ## Guide to set up the tables for the application
 
-1. Install Microsoft SQL Server Management Studio.
+1. Install SQL Server 2019 Express: https://www.microsoft.com/en-us/sql-server/sql-server-downloads.
 
 2. Get the server name and username/password from the login window in MSSQL. Password is not required by default when using Windows authentication:
 <img width="365" alt="image" src="https://user-images.githubusercontent.com/68993851/146932668-7e6d803e-a86e-4b27-a71c-19ddb649e700.png">

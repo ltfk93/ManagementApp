@@ -13,7 +13,7 @@ namespace ManagementApp
     {
 
         public const string ServerName = @"DESKTOP-0M7SFEP\SQLEXPRESS";
-        public const string TableName = "PersonDatabase";
+        public const string TableName = "TestBase";
         public const string DBUsername = @"desktop-0m7sfep\ali";
         public const string DBPassword = "";
 

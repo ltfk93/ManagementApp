@@ -14,7 +14,7 @@ namespace ManagementApp
     {
 
         public const string ServerName = @"DESKTOP-0M7SFEP\SQLEXPRESS";
-        public const string TableName = "PersonDatabase";
+        public const string TableName = "TestBase";
         public const string DBUsername = @"desktop-0m7sfep\ali";
         public const string DBPassword = "";
 
@@ -107,13 +107,13 @@ namespace ManagementApp
                     }
                 case "retirementfund":
                     {
-                        if (sortOrder.Key.Equals("p.RetirementFunt"))
+                        if (sortOrder.Key.Equals("p.RetirementFund"))
                         {
-                            sortOrder = new KeyValuePair<string, string>("p.RetirementFunt", sortOrder.Value == "asc" ? "desc" : "asc;");
+                            sortOrder = new KeyValuePair<string, string>("p.RetirementFund", sortOrder.Value == "asc" ? "desc" : "asc;");
                         }
                         else
                         {
-                            sortOrder = new KeyValuePair<string, string>("p.RetirementFunt", "asc");
+                            sortOrder = new KeyValuePair<string, string>("p.RetirementFund", "asc");
                         }
                         peopleDatabase.Items.Clear();
                         seedList(sortOrder);
@@ -143,7 +143,7 @@ namespace ManagementApp
         public void seedList(KeyValuePair<string, string> sortOptions)
         {
             string query = 
-                $"SELECT p.PersonID, p.FirstName, p.LastName, p.Age, p.PictureUrl, p.TotalIncome, p.RetirementFunt, l.Workername From Person as p LEFT JOIN Logintable as l ON p.EmployeeID = l.EmployeeID ORDER BY {sortOptions.Key} {sortOptions.Value}";
+                $"SELECT p.PersonID, p.FirstName, p.LastName, p.Age, p.PictureUrl, p.TotalIncome, p.RetirementFund, l.Workername From Person as p LEFT JOIN Logintable as l ON p.EmployeeID = l.EmployeeID ORDER BY {sortOptions.Key} {sortOptions.Value}";
 
             connection = new SqlConnection(connectionString);
             connection.Open();

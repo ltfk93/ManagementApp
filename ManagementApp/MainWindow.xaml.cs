@@ -17,7 +17,7 @@ namespace ManagementApp
     public partial class MainWindow : Window
     {
         public const string ServerName = @"DESKTOP-0M7SFEP\SQLEXPRESS";
-        public const string TableName = "PersonDatabase";
+        public const string TableName = "TestBase";
         public const string DBUsername = @"desktop-0m7sfep\ali";
         public const string DBPassword = "";
 
@@ -166,7 +166,7 @@ namespace ManagementApp
                         earnedField.Text = string.Empty;
                         fundField.Text = string.Empty;
                         notesBox.Text = string.Empty;
-                        imageProfile.Source = new BitmapImage(new Uri(defaultPic));
+                        imageProfile.Source = new BitmapImage(new Uri(defaultPic, UriKind.Relative));
                         imageProfile.Width = 300;
                         imageProfile.Height = 300;
 
@@ -263,7 +263,7 @@ namespace ManagementApp
             command.Connection = connection;
             command.CommandType = CommandType.Text;
             command.CommandText = 
-                $"UPDATE Person Set Firstname = '{FirstName}', Lastname = '{LastName}', Age = '{age}', TotalIncome = '{totalEarned}', Retirementfunt = '{retirement}', Notes = '{tempNotes.ToString()}' WHERE PersonID = {ID}";
+                $"UPDATE Person Set Firstname = '{FirstName}', Lastname = '{LastName}', Age = '{age}', TotalIncome = '{totalEarned}', Retirementfund = '{retirement}', Notes = '{tempNotes.ToString()}' WHERE PersonID = {ID}";
 
             command.ExecuteNonQuery();
 
@@ -361,13 +361,13 @@ namespace ManagementApp
                     }
                 case "retirementfund":
                     {
-                        if (sortOrder.Key.Equals("RetirementFunt"))
+                        if (sortOrder.Key.Equals("RetirementFund"))
                         {
-                            sortOrder = new KeyValuePair<string, string>("RetirementFunt", sortOrder.Value == "asc" ? "desc" : "asc");
+                            sortOrder = new KeyValuePair<string, string>("RetirementFund", sortOrder.Value == "asc" ? "desc" : "asc");
                         }
                         else
                         {
-                            sortOrder = new KeyValuePair<string, string>("RetirementFunt", "asc");
+                            sortOrder = new KeyValuePair<string, string>("RetirementFund", "asc");
                         }
                         peopleList.Items.Clear();
                         seedList(sortOrder);

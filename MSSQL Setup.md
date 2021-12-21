@@ -11,12 +11,12 @@
 
 5. Paste in the following queries to create both tables and insert values:
 
-CREATE TABLE Person(
+<b></i>CREATE TABLE Person(
 	PersonID int IDENTITY(1,1) PRIMARY KEY, Firstname VARCHAR(255), Lastname VARCHAR(255), Age int NOT NULL, EmployeeID int NOT NULL,
 	PictureUrl VARCHAR(255), Notes VARCHAR(5000), TotalIncome int NOT NULL, Retirementfund int NOT NULL
 );
 
-<b></i>Insert INTO Person(Firstname, Lastname, Age, EmployeeID, PictureUrl, Notes, TotalIncome, Retirementfund) VALUES(
+Insert INTO Person(Firstname, Lastname, Age, EmployeeID, PictureUrl, Notes, TotalIncome, Retirementfund) VALUES(
 	'Abel','Hansen',41,1, 'Pictures\1.png', '', 4300000, 215000),
 	('Abdi','Fatah',33,1, 'Pictures\2.png', '', 4300000, 215000),
 	('Jonas','Støhre',46,2, 'Pictures\3.png', '', 4300000, 215000),

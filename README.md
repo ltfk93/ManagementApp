@@ -6,3 +6,5 @@ The LoginTable should contain the "admins" that are going to manage people from 
 The Person table contains all of the people that are registered in the system. This table has 9 columns: PersonID INT(Autoincrement/Primary key), Firstname(Varchar(50)), LastName(Varchar(50)), Age(INT), EmployeeID(INT), PictureUrl(Varchar(255)), Notes(Varchar(5000)), TotalIncome(INT), RetirementFund(INT)
 
 The EmployeeID in the <b>Person</b> table is used to assign it a handler from the <b>Logintable</b>. The assigned handler has the same employeeID.
+
+To set up the SQL server and tables, please follow the guide <a href="https://github.com/ltfk93/ManagementApp/blob/master/MSSQL%20Setup.md">MSSQL Setup.md</a>

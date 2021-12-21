@@ -11,7 +11,7 @@ To set up the SQL server and tables, please follow the guide <a href="https://gi
 
 After that is done, you should be able to use the program and have seeded data in the database. You can log on to 2 users: 
 
-<b>Username: admin  | Password: admin<br>
-Username: user  |   Password: password</b>
+<b>Username: admin  &#9;&#9;   Password: admin<br>
+Username: user  &#9; &#9;    Password: password</b>
 
 Note that the username is not case-sensitive, but the password is.

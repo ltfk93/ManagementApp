@@ -94,6 +94,16 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="obj\Debug\.NETFramework,Version=v4.8.AssemblyAttributes.cs" />
+    <Compile Include="obj\Debug\App.g.cs" />
+    <Compile Include="obj\Debug\App.g.i.cs" />
+    <Compile Include="obj\Debug\DatabaseContent.g.cs" />
+    <Compile Include="obj\Debug\DatabaseContent.g.i.cs" />
+    <Compile Include="obj\Debug\Login.g.cs" />
+    <Compile Include="obj\Debug\Login.g.i.cs" />
+    <Compile Include="obj\Debug\MainWindow.g.cs" />
+    <Compile Include="obj\Debug\MainWindow.g.i.cs" />
+    <Compile Include="obj\Debug\ManagementApp_Content.g.i.cs" />
     <Compile Include="Person.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
@@ -108,6 +118,14 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <Resource Include="obj\Debug\ManagementApp.csproj.FileListAbsolute.txt" />
+    <Content Include="bin\Debug\ManagementApp.exe" />
+    <Content Include="bin\Debug\ManagementApp.pdb" />
+    <Content Include="obj\Debug\ManagementApp.exe" />
+    <Content Include="obj\Debug\ManagementApp.pdb" />
+    <Content Include="obj\Debug\TempPE\Properties.Resources.Designer.cs.dll" />
+    <EmbeddedResource Include="obj\Debug\ManagementApp.g.resources" />
+    <EmbeddedResource Include="obj\Debug\ManagementApp.Properties.Resources.resources" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -115,6 +133,20 @@
     <Content Include="ManagementDB.db">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <None Include="bin\Debug\ManagementApp.exe.config" />
+    <None Include="obj\Debug\DatabaseContent.baml" />
+    <None Include="obj\Debug\DesignTimeResolveAssemblyReferences.cache" />
+    <None Include="obj\Debug\DesignTimeResolveAssemblyReferencesInput.cache" />
+    <None Include="obj\Debug\Login.baml" />
+    <None Include="obj\Debug\MainWindow.baml" />
+    <None Include="obj\Debug\ManagementApp.csproj.AssemblyReference.cache" />
+    <None Include="obj\Debug\ManagementApp.csproj.CoreCompileInputs.cache" />
+    <None Include="obj\Debug\ManagementApp.csproj.GenerateResource.cache" />
+    <None Include="obj\Debug\ManagementApp.csproj.SuggestedBindingRedirects.cache" />
+    <None Include="obj\Debug\ManagementApp_MarkupCompile.cache" />
+    <None Include="obj\Debug\ManagementApp_MarkupCompile.i.cache" />
+    <None Include="obj\Debug\ManagementApp_MarkupCompile.i.lref" />
+    <None Include="obj\Debug\ManagementApp_MarkupCompile.lref" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -137,6 +169,9 @@
     <Resource Include="Pictures\9.png" />
     <Resource Include="Pictures\none.png" />
     <Resource Include="Pictures\pic.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="bin\Release\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\Stub.System.Data.SQLite.Core.NetFramework.1.0.115.5\build\net46\Stub.System.Data.SQLite.Core.NetFramework.targets" Condition="Exists('..\packages\Stub.System.Data.SQLite.Core.NetFramework.1.0.115.5\build\net46\Stub.System.Data.SQLite.Core.NetFramework.targets')" />

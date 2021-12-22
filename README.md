@@ -1,5 +1,5 @@
 # ManagementApp
-This application is a management application with SQLite as the SQL Server. To make this application executable. The database in the SQlite server contains to tables: <b>Person</b> and <b>LoginTable</b>.
+This application is a management application with SQLite as the SQL Server, and is written for the Windows operating system. To make this application executable. The database in the SQlite server contains to tables: <b>Person</b> and <b>LoginTable</b>.
 
 The LoginTable should contain the "admins" that are going to manage people from the people database. This table has 4 columns: EmployeeID INT(Autoincrement/Primary key), Username(Varchar(50)), Password(Varchar(50)), Workername(Varchar(150)).
 

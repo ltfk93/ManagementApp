@@ -1,6 +1,12 @@
 ## Guide to set up the tables for the application
 
+#NB: If you are going to use MSSQL with this project, please remember to change all the variables that are an instance of SQLiteConnection and SQLiteCommand to SqlConnection and SqlCommand respectively.
+
+To run this program with MSSQL, you need to install both an instance of a mssql server(SQL Server 2019 is a free edition), and Microsoft SQL Server Management Studio to interact with the MSSQL server. Follow this guide to download and set it up: https://docs.microsoft.com/en-us/sql/ssms/download-sql-server-management-studio-ssms?view=sql-server-ver15
+
+
 1. Install SQL Server 2019 Express: https://www.microsoft.com/en-us/sql-server/sql-server-downloads.
+   Install Microsoft SQL Server Management Studio: 
 
 2. Get the server name and username/password from the login window in MSSQL. Password is not required by default when using Windows authentication:
 <img width="365" alt="image" src="https://user-images.githubusercontent.com/68993851/146932668-7e6d803e-a86e-4b27-a71c-19ddb649e700.png">

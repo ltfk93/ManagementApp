@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.Data.SQLite;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -12,7 +13,6 @@ namespace ManagementApp
     /// </summary>
     public partial class DatabaseContent : Window
     {
-
         //Creating a key/value pair that will store which columnheader that the list should sort by as "key", and the direction as "value"
         KeyValuePair<string, string> sortOrder = new KeyValuePair<string, string>("PersonID", "asc");
 
@@ -21,9 +21,8 @@ namespace ManagementApp
         string connectionString = DBClass.getConnectionString();
 
         //Declaring the SQL variables
-        SqlConnection connection;
-        SqlCommand command;
-        SqlDataReader reader;
+        SQLiteConnection connection;
+        SQLiteCommand command;
 
         //Storing the EmployeeID and Workername in these variables.
         private int userID;
@@ -41,13 +40,13 @@ namespace ManagementApp
         private void listViewColumn_Click(object sender, RoutedEventArgs e)
         {
             GridViewColumnHeader column = (sender as GridViewColumnHeader);
-            switch(column.Tag.ToString().ToLower())
+            switch (column.Tag.ToString().ToLower())
             {
                 case "firstname":
                     {
                         if (sortOrder.Key.Equals("p.Firstname"))
                         {
-                            sortOrder = new KeyValuePair<string, string>("p.Firstname", sortOrder.Value == "asc" ? "desc" : "asc;");
+                            sortOrder = new KeyValuePair<string, string>("p.Firstname", sortOrder.Value == "asc" ? "desc" : "asc");
                         }
                         else
                         {
@@ -61,7 +60,7 @@ namespace ManagementApp
                     {
                         if (sortOrder.Key.Equals("p.Lastname"))
                         {
-                            sortOrder = new KeyValuePair<string, string>("p.Lastname", sortOrder.Value == "asc" ? "desc" : "asc;");
+                            sortOrder = new KeyValuePair<string, string>("p.Lastname", sortOrder.Value == "asc" ? "desc" : "asc");
                         }
                         else
                         {
@@ -75,7 +74,7 @@ namespace ManagementApp
                     {
                         if (sortOrder.Key.Equals("p.Age"))
                         {
-                            sortOrder = new KeyValuePair<string, string>("p.Age", sortOrder.Value == "asc" ? "desc" : "asc;");
+                            sortOrder = new KeyValuePair<string, string>("p.Age", sortOrder.Value == "asc" ? "desc" : "asc");
                         }
                         else
                         {
@@ -89,7 +88,7 @@ namespace ManagementApp
                     {
                         if (sortOrder.Key.Equals("p.TotalIncome"))
                         {
-                            sortOrder = new KeyValuePair<string, string>("p.TotalIncome", sortOrder.Value == "asc" ? "desc" : "asc;");
+                            sortOrder = new KeyValuePair<string, string>("p.TotalIncome", sortOrder.Value == "asc" ? "desc" : "asc");
                         }
                         else
                         {
@@ -103,7 +102,7 @@ namespace ManagementApp
                     {
                         if (sortOrder.Key.Equals("p.RetirementFund"))
                         {
-                            sortOrder = new KeyValuePair<string, string>("p.RetirementFund", sortOrder.Value == "asc" ? "desc" : "asc;");
+                            sortOrder = new KeyValuePair<string, string>("p.RetirementFund", sortOrder.Value == "asc" ? "desc" : "asc");
                         }
                         else
                         {
@@ -117,7 +116,7 @@ namespace ManagementApp
                     {
                         if (sortOrder.Key.Equals("l.Workername"))
                         {
-                            sortOrder = new KeyValuePair<string, string>("l.Workername", sortOrder.Value == "asc" ? "desc" : "asc;");
+                            sortOrder = new KeyValuePair<string, string>("l.Workername", sortOrder.Value == "asc" ? "desc" : "asc");
                         }
                         else
                         {
@@ -136,18 +135,18 @@ namespace ManagementApp
         //Function to populate the listview. Takes a Key/Value pair for options on what to order the list by, and in which direction.
         public void seedList(KeyValuePair<string, string> sortOptions)
         {
-            string query = 
+            string query =
                 $"SELECT p.PersonID, p.FirstName, p.LastName, p.Age, p.PictureUrl, p.TotalIncome, p.RetirementFund, l.Workername From Person as p LEFT JOIN Logintable as l ON p.EmployeeID = l.EmployeeID ORDER BY {sortOptions.Key} {sortOptions.Value}";
 
-            connection = new SqlConnection(connectionString);
+            connection = new SQLiteConnection(connectionString);
             connection.Open();
 
-            command = new SqlCommand();
+            command = new SQLiteCommand();
             command.Connection = connection;
             command.CommandType = CommandType.Text;
             command.CommandText = query;
 
-            reader = command.ExecuteReader();
+            var reader = command.ExecuteReader();
 
             while (reader.Read())
             {
@@ -170,17 +169,17 @@ namespace ManagementApp
         //This function runs when the "Manage" button has been clicked. This is only clickable if the person chosen from the list is not already being handled/managed by the user logged in.
         private void manageBtn_Click(object sender, RoutedEventArgs e)
         {
-            Person selectedPerson = (Person) peopleDatabase.SelectedItems[0];
-            if(selectedPerson.Handler != null && !selectedPerson.Handler.Equals(userName))
+            Person selectedPerson = (Person)peopleDatabase.SelectedItems[0];
+            if (selectedPerson.Handler != null && !selectedPerson.Handler.Equals(userName))
             {
                 //Creating a DialogResult variable to hold the respons from the message box. Promting the user to either click on yes or no whether the user is sure that he will take over the handler role for the user
                 System.Windows.Forms.DialogResult dr = System.Windows.Forms.MessageBox.Show($"{selectedPerson.FirstName} {selectedPerson.LastName} already has a handler\nAre you sure you want to take over the handler role?", "Warning",
                     System.Windows.Forms.MessageBoxButtons.YesNo, System.Windows.Forms.MessageBoxIcon.Question);
-                if(dr == System.Windows.Forms.DialogResult.Yes)
+                if (dr == System.Windows.Forms.DialogResult.Yes)
                 {
-                    connection = new SqlConnection(connectionString);
+                    connection = new SQLiteConnection(connectionString);
                     connection.Open();
-                    command = new SqlCommand();
+                    command = new SQLiteCommand();
                     command.Connection = connection;
                     command.CommandType = CommandType.Text;
                     command.CommandText = $"UPDATE Person SET EmployeeID = {userID} WHERE PersonID = {selectedPerson.ID}";
@@ -202,10 +201,10 @@ namespace ManagementApp
         //This function runs when a person from the listview has been clicked on. If the person chosen is already being handled by the user logged in, then the "Manage" button will be hidden. 
         private void peopleDatabase_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if(peopleDatabase.SelectedItems.Count != 0)
+            if (peopleDatabase.SelectedItems.Count != 0)
             {
                 Person selectedPerson = (Person)peopleDatabase.SelectedItems[0];
-                if(selectedPerson.Handler.Equals(userName))
+                if (selectedPerson.Handler.Equals(userName))
                 {
                     manageBtn.Visibility = Visibility.Hidden;
                 }
@@ -223,7 +222,6 @@ namespace ManagementApp
         //Closes the database connections and deals with garbagecollection.
         private void closeConnections()
         {
-            reader.Close();
             command.Dispose();
             connection.Close();
             connection.Dispose();

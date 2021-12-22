@@ -7,6 +7,7 @@ using System.Windows.Media.Imaging;
 using System;
 using System.Windows.Media;
 using System.Collections.Generic;
+using System.Data.SQLite;
 
 namespace ManagementApp
 {
@@ -16,18 +17,16 @@ namespace ManagementApp
     /// </summary>
     public partial class MainWindow : Window
     {
-
         //Creating a key/value pair that will store which columnheader that the list should sort by as "key", and the direction as "value"
         KeyValuePair<string, string> sortOrder = new KeyValuePair<string, string>("PersonID", "asc");
-       
+
         //Setting connectionstring to MSSQL server. Also setting a default path for the picture that will show for users that has no pictures saved
         const string defaultPic = @"Pictures\none.png";
         string connectionString = DBClass.getConnectionString();
 
         //Declaring the SQL variables
-        SqlConnection connection;
-        SqlCommand command;
-        SqlDataReader reader;
+        SQLiteConnection connection;
+        SQLiteCommand command;
 
         //Creating Stringbuilders that will hold the temporary text values of Firstname, Lastname and Notes
         StringBuilder tempFirstName = new StringBuilder();
@@ -96,11 +95,11 @@ namespace ManagementApp
         private void editBtn_Click(object sender, RoutedEventArgs e)
         {
             //Checks if an entry in the listview has been selected. If not, nothing will happen when clicking on edit.
-            if(peopleList.SelectedItems.Count != 0)
+            if (peopleList.SelectedItems.Count != 0)
             {
                 int validAge;
                 int validFund;
-               
+
                 //Checking if the content value of editBtn. If it is edit, it changes the button text to "save" and makes the cancel button visible.
                 if (editBtn.Content.Equals("Edit"))
                 {
@@ -112,7 +111,7 @@ namespace ManagementApp
                     tempAge = int.Parse(ageField.Text);
                     tempTotalEarned = int.Parse(earnedField.Text);
                     tempNotes.Append(notesBox.Text);
-                    
+
                 }
                 else
                 {
@@ -127,7 +126,7 @@ namespace ManagementApp
                         return;
                     }
                     //Checks if there was no changes made
-                    if ((firstNameField.Text.ToLower().Equals(tempFirstName.ToString().ToLower()) && lastNameField.Text.ToLower().Equals(tempLastName.ToString().ToLower()) && tempAge == 
+                    if ((firstNameField.Text.ToLower().Equals(tempFirstName.ToString().ToLower()) && lastNameField.Text.ToLower().Equals(tempLastName.ToString().ToLower()) && tempAge ==
                         int.Parse(ageField.Text.Length < 1 ? "0" : ageField.Text) && tempTotalEarned == int.Parse(earnedField.Text.ToString().Length < 1 ? "0" : earnedField.Text.ToString())) && tempNotes.ToString().Equals(notesBox.Text))
                     {
                         MessageBox.Show("No changes were made.", "Information");
@@ -136,9 +135,9 @@ namespace ManagementApp
                     }
 
                     //Checks if user is trying to save one of the fields with no information.
-                    else if(firstNameField.Text.Length < 1 || lastNameField.Text.Length < 1 || ageField.Text.Length < 1 || earnedField.Text.Length < 1)
+                    else if (firstNameField.Text.Length < 1 || lastNameField.Text.Length < 1 || ageField.Text.Length < 1 || earnedField.Text.Length < 1)
                     {
-                        MessageBox.Show("You have to fill out all the fields to make a change. Reverting changes and canceling edit.","Information");
+                        MessageBox.Show("You have to fill out all the fields to make a change. Reverting changes and canceling edit.", "Information");
 
                         firstNameField.Text = tempFirstName.ToString();
                         lastNameField.Text = tempLastName.ToString();
@@ -151,7 +150,7 @@ namespace ManagementApp
                     //Changes were detected. Calling the changePerson function with the changes that will be queried in to the database.
                     else
                     {
-                        changePerson(firstNameField.Text, lastNameField.Text, int.Parse(ageField.Text), int.Parse(earnedField.Text), 
+                        changePerson(firstNameField.Text, lastNameField.Text, int.Parse(ageField.Text), int.Parse(earnedField.Text),
                            tempNotes.ToString().Equals(notesBox.Text) ? "" : notesBox.Text, personID);
                         MessageBox.Show("Changes has been made successfully. Reloading list.");
                         peopleList.Items.Clear();
@@ -183,30 +182,30 @@ namespace ManagementApp
         }
 
         //Function to populate the listview. Takes a Key/Value pair for options on what to order the list by, and in which direction.
-        public void seedList(KeyValuePair<string,string> sortOptions)
+        public void seedList(KeyValuePair<string, string> sortOptions)
         {
-            connection = new SqlConnection(connectionString);
+            connection = new SQLiteConnection(connectionString);
             connection.Open();
 
-            command = new SqlCommand();
+            command = new SQLiteCommand();
             command.Connection = connection;
             command.CommandType = CommandType.Text;
             command.CommandText = $"SELECT * From Person WHERE EmployeeID={userID}";
-            command.CommandText += $" ORDER BY {sortOptions.Key} {sortOptions.Value}"; 
+            command.CommandText += $" ORDER BY {sortOptions.Key} {sortOptions.Value}";
 
 
-            reader = command.ExecuteReader();
+            var reader = command.ExecuteReader();
 
-            while(reader.Read())
+            while (reader.Read())
             {
-                peopleList.Items.Add(new Person() 
-                { 
-                    FirstName = reader.GetString(1), 
-                    LastName = reader.GetString(2), 
-                    Age = reader.GetInt32(3), 
+                peopleList.Items.Add(new Person()
+                {
+                    FirstName = reader.GetString(1),
+                    LastName = reader.GetString(2),
+                    Age = reader.GetInt32(3),
                     ID = reader.GetInt32(0),
-                    PictureUrl = reader.GetString(5).Length > 1 ? reader.GetString(5) : defaultPic, 
-                    TotalIncome = reader.GetInt32(7), 
+                    PictureUrl = reader.GetString(5).Length > 1 ? reader.GetString(5) : defaultPic,
+                    TotalIncome = reader.GetInt32(7),
                     RetirementFund = reader.GetInt32(8),
                     Notes = reader.GetString(6)
                 });
@@ -218,15 +217,15 @@ namespace ManagementApp
         public void seedList(object sender, RoutedEventArgs e)
         {
             peopleList.Items.Clear();
-            connection = new SqlConnection(connectionString);
+            connection = new SQLiteConnection(connectionString);
             connection.Open();
 
-            command = new SqlCommand();
+            command = new SQLiteCommand();
             command.Connection = connection;
             command.CommandType = CommandType.Text;
             command.CommandText = $"SELECT * From Person WHERE EmployeeID={userID}";
 
-            reader = command.ExecuteReader();
+            var reader = command.ExecuteReader();
 
             while (reader.Read())
             {
@@ -252,13 +251,13 @@ namespace ManagementApp
 
             //Checks if something was passed in to the note. It will be an empty string if there was no changes made to the notes. If there is a string passed, it gets appended to the existing notes the person has,
             tempNotes.Append(note.Length < 1 ? "" : $"New note:\n{note}");
-            connection = new SqlConnection(connectionString);
+            connection = new SQLiteConnection(connectionString);
             connection.Open();
 
-            command = new SqlCommand();
+            command = new SQLiteCommand();
             command.Connection = connection;
             command.CommandType = CommandType.Text;
-            command.CommandText = 
+            command.CommandText =
                 $"UPDATE Person Set Firstname = '{FirstName}', Lastname = '{LastName}', Age = '{age}', TotalIncome = '{totalEarned}', Retirementfund = '{retirement}', Notes = '{tempNotes.ToString()}' WHERE PersonID = {ID}";
 
             command.ExecuteNonQuery();
@@ -273,7 +272,7 @@ namespace ManagementApp
         {
             if (peopleList.SelectedItems.Count != 0)
             {
-                Person itemFromList = (Person) peopleList.SelectedItems[0];
+                Person itemFromList = (Person)peopleList.SelectedItems[0];
                 firstNameField.Text = itemFromList.FirstName;
                 lastNameField.Text = itemFromList.LastName;
                 ageField.Text = itemFromList.Age.ToString();
@@ -301,13 +300,13 @@ namespace ManagementApp
             {
                 case "firstname":
                     {
-                        if(sortOrder.Key.Equals("Firstname"))
+                        if (sortOrder.Key.Equals("Firstname"))
                         {
                             sortOrder = new KeyValuePair<string, string>("Firstname", sortOrder.Value == "asc" ? "desc" : "asc");
                         }
                         else
                         {
-                            sortOrder = new KeyValuePair<string, string>("Firstname","asc");
+                            sortOrder = new KeyValuePair<string, string>("Firstname", "asc");
                         }
                         peopleList.Items.Clear();
                         seedList(sortOrder);

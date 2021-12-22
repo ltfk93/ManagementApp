@@ -1,5 +1,7 @@
-﻿using System.Data;
+﻿using System.Collections.Generic;
+using System.Data;
 using System.Data.SqlClient;
+using System.Data.SQLite;
 using System.Windows;
 
 namespace ManagementApp
@@ -11,14 +13,13 @@ namespace ManagementApp
     /// </summary>
     public partial class Login : Window
     {
-
         //Connectionstring for the MSSQL database
         string connectionString = DBClass.getConnectionString();
 
+
         //Declaring variables that will connect to the database and query/read result.
-        SqlConnection connection;
-        SqlCommand command;
-        SqlDataReader reader;
+        SQLiteConnection connection;
+        SQLiteCommand command;
 
         public Login()
         {
@@ -29,7 +30,7 @@ namespace ManagementApp
         //The function first checks if the username and password fields has been filled out. If not, it will show a message box informing the user about the mistake.
         private void btnLogin_Click(object sender, RoutedEventArgs e)
         {
-            if(usernameField.Text.Length < 1 || passswordField.ToString().Length < 1)
+            if (usernameField.Text.Length < 1 || passswordField.ToString().Length < 1)
             {
                 MessageBox.Show("Please fill out both a username and password.", "Error");
             }
@@ -40,14 +41,14 @@ namespace ManagementApp
                 string username = string.Empty;
 
                 //Initializing the sql variables.
-                connection = new SqlConnection(connectionString);
+                connection = new SQLiteConnection(connectionString);
                 connection.Open();
 
-                command = new SqlCommand();
+                command = new SQLiteCommand();
                 command.Connection = connection;
                 command.CommandType = CommandType.Text;
                 command.CommandText = "SELECT * from LoginTable";
-                reader = command.ExecuteReader();
+                var reader = command.ExecuteReader();
 
 
                 //Creating a bool variable that will either be true if there is a match of an entry having same username(not case-sensitive) and password, or false otherwise.
@@ -65,10 +66,10 @@ namespace ManagementApp
                 //Manual garbagecollection
                 connection.Close();
                 command.Dispose();
-                reader.Close();
+                //reader.Close();
                 connection.Dispose();
 
-                if(!validLogin)
+                if (!validLogin)
                 {
                     MessageBox.Show("Login failed. Please check your username and password.", "Error");
                 }
@@ -76,12 +77,12 @@ namespace ManagementApp
                 {
                     //A match was found in the LoginTable. Showing a message box to greet the user with his worker name, creating a new instance of the MainWindow and closing the login window.
                     MessageBox.Show($"Welcome {username}", "Login success");
-                    MainWindow mainWindow = new MainWindow(username,userID);
+                    MainWindow mainWindow = new MainWindow(username, userID);
                     mainWindow.Show();
                     this.Close();
                 }
             }
-            
+
         }
         //This method runs when the Cancel button has been clicked. Closes down the login window.
         private void btnClose_Click(object sender, RoutedEventArgs e)
